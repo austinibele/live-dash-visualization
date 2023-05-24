@@ -4,20 +4,24 @@ import dash_html_components as html
 import plotly.graph_objs as go
 import requests
 import datetime
-import numpy as np
+import dash_bootstrap_components as dbc
 
-app = dash.Dash(__name__)
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.LUX])
 
 # Logging Interval 
 INTERVAL = 500 #ms
 # Display last N seconds
-DISPLAY_N_SECONDS = 5
+DISPLAY_N_SECONDS = 30
 # Number of points to display
 N_POINTS = int((INTERVAL/1000)*DISPLAY_N_SECONDS)
 # Number of sensors
 N_SENSORS = 9
 # Circle diameter for heatmap
 CIRCLE_DIAMETER = 100
+# Heatmap minimum temperature
+HEATMAP_TMIN = 79.5
+# Heatmap maximum temperature
+HEATMAP_TMAX = 80.5
 
 # Create initial empty data lists
 x_data = []
@@ -40,34 +44,48 @@ heatmap_layout = go.Layout(
     polar=dict(
         radialaxis=dict(
           visible=True,
-          range=[0, 150]  # Range should be adjusted based on the data
-        )),
-    showlegend=False
+          ticks='',
+          showticklabels=False,
+          range=[0, 1]  # Range should be adjusted based on the data
+        ),
+        angularaxis=dict(
+            ticks='',
+            showticklabels=False,
+            )),
+    showlegend=False,
+    width=700,  # Increase the width of the plot
+    height=700  # Increase the height of the plot
 )
 
+
 # Create heatmap data, initially with no temperatures
-heatmap_data = [go.Scatterpolar(
-    r=[0] + [0.66]*CIRCLE_DIAMETER,
-    theta=[0, 45, 90, 135, 180, 225, 270, 315, 360],
+heatmap_data = go.Scatterpolar(
+    r=[0] + [0.7]*(N_SENSORS - 1),
+    theta=[0, 0, 45, 90, 135, 180, 225, 270, 315],
     mode='markers',
     marker=dict(
         color=[0, 0, 0, 0, 0, 0, 0, 0, 0],  # Initially no temperatures
-        colorscale='RdBu',
-        size=CIRCLE_DIAMETER,
+        colorscale='YlOrRd',
+        size=80,
+        cmin=HEATMAP_TMIN,
+        cmax=HEATMAP_TMAX,
         colorbar=dict(
             title="Temperature",
             titleside="top",
             tickmode="array",
-            ticks="outside"
+            ticks="outside",
         ),
     ),
-)]
+    hovertemplate="Temperature: %{marker.color}<extra></extra>"  # custom hovertemplate
+)
 
 # Create plot layout
 layout = go.Layout(
     xaxis=dict(title="Time"),
     yaxis=dict(title="Temperature"),
     showlegend=True,
+    width=1120,
+    height=700
 )
 
 # Create plot figure and heatmap figure
@@ -75,14 +93,27 @@ fig = go.Figure(data=plot_data, layout=layout)
 heatmap_fig = go.Figure(data=heatmap_data, layout=heatmap_layout)
 
 # Define the app layout
-app.layout = html.Div(
-    children=[
-        html.H1("Sigma Sensors Dashboard"),
-        dcc.Graph(id="live-graph", figure=fig),
-        dcc.Graph(id="heatmap-graph", figure=heatmap_fig),
+app.layout = dbc.Container(
+    [
+        html.H1("Sigma Sensors Dashboard", className="text-center mb-4", style={"paddingTop": "20px"}),
+        dbc.Row(
+            [
+                dbc.Col(
+                    dcc.Graph(id="live-graph", figure=fig),
+                    width={"size": 7, "order": 1, "offset": 0},
+                ),
+                dbc.Col(
+                    dcc.Graph(id="heatmap-graph", figure=heatmap_fig),
+                    width={"size": 5, "order": 2, "offset": 0},
+                ),
+            ],
+            justify="center",
+        ),
         dcc.Interval(id="interval-component", interval=INTERVAL, n_intervals=0),
-    ]
+    ],
+    fluid=True,
 )
+
 
 
 @app.callback(
