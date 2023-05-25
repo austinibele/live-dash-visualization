@@ -1,0 +1,21 @@
+/* styles.css */
+body {
+    background-color: #F3F3F3;
+    font-family: Arial, sans-serif;
+}
+
+.title-banner {
+    background-color: #303030;
+    color: #FFFFFF;
+    padding: 10px;
+    text-align: center;
+    border-bottom: 2px solid #000000;
+    margin-bottom: 20px;
+}
+
+.card {
+    border: 1px solid #d3d3d3;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}

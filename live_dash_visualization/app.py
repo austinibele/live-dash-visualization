@@ -51,15 +51,15 @@ def update_graph(n):
 # Define the app layout
 app.layout = dbc.Container(
     [
-        html.H1("Sigma Sensors Dashboard", className="text-center mb-4", style={"paddingTop": "20px"}),
+        html.Div(html.H2("Sigma Sensors Dashboard", style={'color': 'white', 'padding-top': '10px'}), className="title-banner"),
         dbc.Row(
             [
                 dbc.Col(
-                    dcc.Graph(id="live-graph", figure=fig),
+                    dbc.Card(dcc.Graph(id="live-graph", figure=fig)),
                     width={"size": 7, "order": 1, "offset": 0},
                 ),
                 dbc.Col(
-                    dcc.Graph(id="heatmap-graph", figure=heatmap_fig),
+                    dbc.Card(dcc.Graph(id="heatmap-graph", figure=heatmap_fig)),
                     width={"size": 5, "order": 2, "offset": 0},
                 ),
             ],
