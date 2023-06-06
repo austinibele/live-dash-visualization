@@ -13,11 +13,11 @@ temperatures = [TEMPERATURE for _ in range(N_SENSORS)]
 
 def update_temperature(old_temp):
     # Choose a random amount to change the temperature, with a maximum change of 0.05
-    change = random.uniform(-0.05, 0.05)
+    change = random.uniform(-0.005, 0.005)
 
     # Update the temperature and ensure it stays within the 149.75 - 150.25 range
     new_temp = old_temp + change
-    new_temp = max(79.75, min(80.25, new_temp))
+    new_temp = max(79.95, min(80.05, new_temp))
 
     return new_temp
 

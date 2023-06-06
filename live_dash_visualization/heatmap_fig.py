@@ -15,8 +15,8 @@ heatmap_layout = go.Layout(
             showticklabels=False,
             )),
     showlegend=False,
-    width=700,  # Increase the width of the plot
-    height=700,  # Increase the height of the plot,
+    width=600,  # Increase the width of the plot
+    height=650,  # Increase the height of the plot,
     title=dict(
         text="Current Temperature",
         x=0.5,  # Center the title
@@ -51,13 +51,10 @@ heatmap_data = go.Scatterpolar(
             tickfont=dict(
                 size=16,  # Increase the font size of colorbar ticks
             ),
+            ypad=30  # Increase the margin between the title and the colorbar
         ),
     ),
-    hovertemplate="Temperature: %{marker.color:.0f}°C<extra></extra>"  # Hovertemplate with °C after the temperature value
+    hovertemplate="Temperature: %{marker.color:.2f}°C<extra></extra>"  # Hovertemplate with °C after the temperature value
 )
 
-
-
 heatmap_fig = go.Figure(data=heatmap_data, layout=heatmap_layout)
-
-
