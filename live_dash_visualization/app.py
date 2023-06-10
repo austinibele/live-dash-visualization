@@ -114,7 +114,7 @@ def update_button_text(max_intervals):
 # Define the app layout
 app.layout = dbc.Container(
     [
-        html.Div(html.H2("Sigma Sensors Dashboard", style={'color': 'white', 'padding-top': '10px'}), className="title-banner"),
+        html.Div(html.H2("Live Data Visualization", style={'color': 'white', 'padding-top': '10px'}), className="title-banner"),
         dbc.Row(
             [
                 dbc.Col(
@@ -143,4 +143,4 @@ app.layout = dbc.Container(
 )
 
 if __name__ == "__main__":
-    app.run_server(debug=True, port=8080)
+    app.run_server(debug=False, port=8080)
